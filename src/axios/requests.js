@@ -25,3 +25,10 @@ export function loginUser (payload) {
 export function retrieveTemplates () {
   return request(constants.request_types.GET, constants.endpoints.terminals, '')
 }
+
+export function retrieveBookCopies (payload) {
+  return request(
+    constants.request_types.GET,
+    constants.endpoints.bookCopy + `/GetByTerminalId/?terminalId=${payload}`
+  )
+}

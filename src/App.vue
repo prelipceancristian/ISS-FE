@@ -23,6 +23,7 @@
       <!--<Tiles v-if="isUserLoggedIn" />-->
       <TerminalScreen v-if="isUserLoggedIn" />
       <LoginScreen v-else @login="handleLogin" />
+      <BookList v-if="isUserLoggedIn" />
     </v-main>
   </v-app>
 </template>
@@ -34,6 +35,7 @@ import constants from './common/constants'
 import User from './components/User'
 import NavigationDrawerContent from './components/NavigationDrawerContent'
 import TerminalScreen from './components/TerminalScreen'
+import BookList from './components/BookList'
 
 export default {
   name: 'App',
@@ -43,7 +45,8 @@ export default {
     User,
     NavigationDrawerContent,
     LoginScreen,
-    TerminalScreen
+    TerminalScreen,
+    BookList
   },
 
   data: () => ({
