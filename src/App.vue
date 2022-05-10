@@ -15,15 +15,22 @@
       dark
       temporary
       :color="constants.black"
-      v-if="isUserLoggedIn"
+      v-if="isUserLoggedIn && isNavigationOpen"
     >
       <NavigationDrawerContent />
     </v-navigation-drawer>
     <v-main>
       <!--<Tiles v-if="isUserLoggedIn" />-->
-      <TerminalScreen v-if="isUserLoggedIn" />
-      <LoginScreen v-else @login="handleLogin" />
-      <BookList v-if="isUserLoggedIn" />
+      <TerminalScreen
+        v-if="isUserLoggedIn && isTerminalListDisplayed"
+        @selectTerminal="handleSelectTerminal"
+      />
+      <LoginScreen v-if="!isUserLoggedIn" @login="handleLogin" />
+      <BookList
+        v-if="isUserLoggedIn && isBookListDisplayed"
+        :books="books"
+        @borrow="handleBorrow"
+      />
     </v-main>
   </v-app>
 </template>
@@ -36,6 +43,8 @@ import User from './components/User'
 import NavigationDrawerContent from './components/NavigationDrawerContent'
 import TerminalScreen from './components/TerminalScreen'
 import BookList from './components/BookList'
+import { retrieveBookCopies } from './axios/requests.js'
+import { borrowBook } from './axios/requests.js'
 
 export default {
   name: 'App',
@@ -55,9 +64,14 @@ export default {
     testUser: {
       imageURL: '',
       name: '',
-      username: ''
+      username: '',
+      id: ''
     },
-    isUserLoggedIn: true
+    isUserLoggedIn: false,
+    isTerminalListDisplayed: false,
+    isBookListDisplayed: false,
+    terminalId: '',
+    books: []
   }),
 
   methods: {
@@ -65,7 +79,38 @@ export default {
       let user = payload.user
       this.testUser.name = user.name
       this.testUser.username = user.username
+      this.testUser.id = user.id
       this.isUserLoggedIn = true
+      this.isTerminalListDisplayed = true
+    },
+    handleSelectTerminal (terminalId) {
+      retrieveBookCopies(terminalId).then(response => {
+        if (response.status == '200') {
+          this.books = response.data
+          console.log(response.data)
+          this.isTerminalListDisplayed = false
+          this.isBookListDisplayed = true
+        } else {
+          console.log(response.data)
+        }
+      })
+    },
+    handleBorrow (bookId) {
+      var payload = {
+        bookCopyId: bookId,
+        userId: this.testUser.id,
+        deadline: '2022-07-07'
+      }
+      console.log(payload)
+      borrowBook(payload).then(response => {
+        if (response.status == '200') {
+          this.books = this.books.filter(function (value) {
+            return value.id != bookId
+          })
+        } else {
+          console.log(response.data)
+        }
+      })
     }
   }
 }

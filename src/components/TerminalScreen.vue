@@ -1,14 +1,8 @@
 <template>
-  <!--
-  <div class="terminal-container">
-    <li v-for="terminal of terminals" :key="terminal.id">
-      <TerminalTile :terminal="terminal" />
-    </li>
-  </div> -->
   <v-container>
     <v-row>
       <v-col v-for="terminal of terminals" :key="terminal.id">
-        <TerminalTile :terminal="terminal" />
+        <TerminalTile :terminal="terminal" @selectTerminal="selectTerminal" />
       </v-col>
     </v-row>
   </v-container>
@@ -34,8 +28,12 @@ export default {
           console.log(response)
         }
       })
+    },
+    selectTerminal (payload) {
+      this.$emit('selectTerminal', payload)
     }
   },
+
   created () {
     this.handleRetrieveTerminals()
   }

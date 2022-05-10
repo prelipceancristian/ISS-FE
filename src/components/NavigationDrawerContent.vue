@@ -14,6 +14,7 @@
           v-for="itemKey of Object.keys(routes[categoryKey])"
           :key="itemKey"
           :ripple="{ class: 'white--text' }"
+          @click="handleClick"
         >
           <v-list-item-icon>
             <v-icon
@@ -50,7 +51,14 @@ export default {
     selected: {
       color: 'red'
     }
-  })
+  }),
+  methods: {
+    handleClick () {
+      if (this.itemKey == 'Choose Terminal') {
+        console.log('asdsa')
+      }
+    }
+  }
 }
 </script>
 

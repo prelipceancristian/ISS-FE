@@ -1,35 +1,41 @@
 <template>
   <v-container>
-    <v-row>
+    <v-row v-if="books.length != 0">
       <v-col v-for="book of books" :key="book.id">
-        <BookTile :book="book" />
+        <BookTile :book="book" @borrow="borrow" />
       </v-col>
     </v-row>
+    <div v-else>
+      No books found
+    </div>
   </v-container>
 </template>
 
 <script>
 import BookTile from './BookTile'
-import { retrieveBookCopies } from '../axios/requests'
+//import { retrieveBookCopies } from '../axios/requests'
 export default {
   name: 'BookList',
   components: { BookTile },
-  data: () => ({
-    books: []
-  }),
+  // data: () => ({
+  //   books: []
+  // }),
+  props: ['books'],
   methods: {
-    handleRetrieveBookCopies () {
-      retrieveBookCopies('e8da9b1e-e1a3-4d5b-8190-4ff9e2bbc9bd').then(
-        response => {
-          if (response.data) {
-            this.books = response.data
-          }
-        }
-      )
+    borrow (bookId) {
+      this.$emit('borrow', bookId)
     }
-  },
-  created () {
-    this.handleRetrieveBookCopies()
   }
+  // created () {
+  //   this.handleRetrieveBookCopies()
+  // },
+  // updated () {
+  //   this.handleRetrieveBookCopies()
+  // },
+  // watch: {
+  //   terminalId: function (val) {
+  //     console.log(val)
+  //   }
+  // }
 }
 </script>

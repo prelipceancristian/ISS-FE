@@ -26,7 +26,7 @@
     </v-card-text>
     <v-card-title>Book copies available: {{ getBookCopyCount() }}</v-card-title>
     <v-card-actions>
-      <v-btn color="deep-purple lighten-2" text @click="reserve">
+      <v-btn color="deep-purple lighten-2" text @click="selectTerminal">
         Check books
       </v-btn>
     </v-card-actions>
@@ -42,11 +42,9 @@ export default {
     timetable2: 'Sat: 09:00 - 13:00',
     timetable3: 'Sun: Closed'
   }),
-
   methods: {
-    reserve () {
-      this.loading = true
-      setTimeout(() => (this.loading = false), 2000)
+    selectTerminal () {
+      this.$emit('selectTerminal', this.terminal.id)
     },
     getBookCopyCount () {
       return this.terminal.bookCopies.length

@@ -32,3 +32,11 @@ export function retrieveBookCopies (payload) {
     constants.endpoints.bookCopy + `/GetByTerminalId/?terminalId=${payload}`
   )
 }
+
+export function borrowBook (payload) {
+  return request(
+    constants.request_types.POST,
+    constants.endpoints.bookCopy,
+    payload
+  )
+}
